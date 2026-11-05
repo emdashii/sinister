@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en" data-hand="left">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#a3122f" />
+    <meta name="description" content="How Sinister finds one-handed words, where its data comes from, and the licenses." />
+    <title>About Sinister: sources and method</title>
+    <script>
+      if (new URLSearchParams(location.search).get("hand") === "right") document.documentElement.dataset.hand = "right";
+    </script>
+    <link rel="icon" id="favicon" href="/icon-sinister.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="05154cb7-f825-40a9-960c-13a6fcaed9f7" data-domains="sinister.mazzaella.com"></script>
+  </head>
+  <body>
+    <article class="about">
+      <p><a href="/" id="home">← Back to <span class="site-name">Sinister</span></a></p>
+      <h1 class="about-title">About <span class="site-name">Sinister</span></h1>
+      <p>
+        This site lists real English words that you can type with one hand, most common first, then narrows them with
+        filters you chain together. It is Sinister for the left hand and Dexter for the right. <em>Sinister</em> and
+        <em>dexter</em> are Latin for left and right. Sinister came to mean “evil” from an old superstition about the left hand.
+      </p>
+      <p>Everything runs in your browser. There is no server: the site is static files, and your filters live in the page address, so a link reproduces them.</p>
+
+      <h2>Which keys count</h2>
+      <p>
+        A hand is a set of keys. QWERTY, Dvorak and Colemak use the standard touch-typing split: the left hand types the five
+        columns on the left (on QWERTY, Q W E R T, A S D F G, Z X C V B) and the right hand types the rest. The “reach column”
+        option drops the index finger’s inner column (T G B on the left and Y H N on the right for QWERTY). Tap keys on the
+        keyboard to choose any set you like; switching hands then mirrors your set. A word is listed only when every letter is
+        in the set. Automated tests check this property for every layout, hand and random key set.
+      </p>
+
+      <h2>Where the words come from</h2>
+      <p>
+        The word list starts from <a href="https://en-word.net/">Open English WordNet 2025 Plus</a>. It keeps single-word
+        entries made only of the letters a to z, and drops abbreviations, element symbols and Roman numerals (such as “ft”,
+        “Eu” and “xiv”). WordNet lists base forms only, so plurals, verb forms and comparatives are added when the
+        frequency list has seen them. That is how “stewardesses” and “aftereffects” appear for the left hand. Words are ranked by
+        <a href="https://github.com/rspeer/wordfreq">wordfreq</a>, so common words come first. The result is 109,519 words. These
+        files are built once, offline, by scripts in the repository. The site never fetches WordNet or wordfreq while you use it.
+      </p>
+
+      <h2>Filters</h2>
+      <p>
+        <strong>By category</strong> walks WordNet’s hypernym tree (animal › reptile › snake). A word passes when any of its
+        meanings sits at or below the category. This filter is exact, and it is the ground truth for everything else.
+      </p>
+      <p>
+        <strong>By description</strong> takes free text such as “things in a kitchen” or “sounds scary”. The first time you use it,
+        your browser downloads a small embedding model (<a href="https://huggingface.co/mixedbread-ai/mxbai-embed-xsmall-v1">mxbai-embed-xsmall-v1</a>,
+        24 MB, from Hugging Face), its runtime (2.7 MB, from jsDelivr), and 4.2 MB of precomputed vectors, one per WordNet
+        meaning. After that, it works offline. Your query never leaves the device. A word scores as its best-matching
+        meaning. The slider sets the minimum similarity, and results are ordered from most to least similar. On 10
+        category names, an average of 71% of the top 30 words were true members of the category (precision@30). This
+        filter is approximate. Use a category when you need an exact list.
+        <a href="https://github.com/emdashii/sinister/blob/main/docs/adr/0001-semantic-filter.md">The design record</a> has the measurements.
+      </p>
+
+      <h2>Latin names</h2>
+      <p>
+        The “Include Latin genus names” option loads 244,648 genus names (1.5 MB) from the
+        <a href="https://www.gbif.org/dataset/d7dddbf4-2cf0-4f39-9b2a-bb099caae36c">GBIF Backbone Taxonomy</a>. The subset
+        is accepted genera that contain at least one accepted species, without viruses and without names that WordNet already
+        has. Genus names are single Latin words, which is what the hand filter matches. Species epithets repeat across genera,
+        and full species names are two words. Genera with more species come first. Each genus is filed under WordNet’s
+        matching category, such as “reptile genus”, so the category filter reaches it too.
+      </p>
+
+      <h2>Privacy</h2>
+      <p>
+        The site counts page views with <a href="https://umami.is/">Umami</a>, which sets no cookies. Nothing you type is sent
+        anywhere. The only other requests are the data files above, made when a feature first needs them.
+      </p>
+
+      <h2>Sources and licenses</h2>
+      <table>
+        <thead><tr><th>Source</th><th>Used for</th><th>License</th></tr></thead>
+        <tbody>
+          <tr><td><a href="https://en-word.net/">Open English WordNet</a> 2025 Plus (McCrae et al., Global WordNet Association)</td><td>Words, meanings, the category tree</td><td><a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></td></tr>
+          <tr><td><a href="https://github.com/rspeer/wordfreq">wordfreq</a> 3.2, <code>large_en</code> list (Robyn Speer; includes Google Books Ngrams, SUBTLEX, OpenSubtitles, Wikipedia and other corpora)</td><td>Ranking, and which inflections are real</td><td><a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></td></tr>
+          <tr><td><a href="https://doi.org/10.15468/39omei">GBIF Backbone Taxonomy</a>, 2023-08-28 (GBIF Secretariat)</td><td>Latin genus names</td><td><a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></td></tr>
+          <tr><td><a href="https://huggingface.co/mixedbread-ai/mxbai-embed-xsmall-v1">mxbai-embed-xsmall-v1</a> (Mixedbread)</td><td>Description filter model and vectors</td><td>Apache 2.0</td></tr>
+          <tr><td><a href="https://github.com/huggingface/transformers.js">Transformers.js</a> and <a href="https://onnxruntime.ai/">ONNX Runtime Web</a></td><td>Running the model in the browser</td><td>Apache 2.0, MIT</td></tr>
+          <tr><td>IM Fell English (Igino Marini) and Instrument Sans</td><td>Typefaces</td><td>SIL Open Font License 1.1</td></tr>
+        </tbody>
+      </table>
+      <p>
+        The word list (<code>words.json</code>) combines WordNet with wordfreq’s ranking, so it is shared under CC BY-SA 4.0.
+        The other data files are shared under CC BY 4.0, and the code under the MIT license.
+        <a href="https://github.com/emdashii/sinister">Source code</a>.
+      </p>
+    </article>
+    <script type="module" src="/src/about.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en" data-hand="left">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#a3122f" />
+    <meta name="description" content="Find real English words you can type with one hand, then narrow them by category or by a description. Runs entirely in your browser." />
+    <title>Sinister: words you can type with your left hand</title>
+    <script>
+      // Pick the hand before first paint, so a shared Dexter link never flashes Sinister.
+      if (new URLSearchParams(location.search).get("hand") === "right") document.documentElement.dataset.hand = "right";
+    </script>
+    <link rel="icon" id="favicon" href="/icon-sinister.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://sinister.mazzaella.com/" />
+    <meta property="og:title" content="Sinister: words you can type with one hand" />
+    <meta property="og:description" content="Find real English words you can type with one hand, then narrow them by category or by a description." />
+    <meta property="og:image" content="https://sinister.mazzaella.com/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="The Sinister shield and a list of words typed with the left hand: stewardesses, aftereffects, reverberated." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="05154cb7-f825-40a9-960c-13a6fcaed9f7" data-domains="sinister.mazzaella.com"></script>
+  </head>
+  <body>
+    <div class="app">
+      <header class="masthead">
+        <svg class="shield" viewBox="0 0 64 72" aria-hidden="true">
+          <defs>
+            <clipPath id="shield-clip"><path d="M4 4h56v30c0 18-12 30-28 35C16 64 4 52 4 34z" /></clipPath>
+          </defs>
+          <g clip-path="url(#shield-clip)">
+            <rect class="shield-field" width="64" height="72" />
+            <path class="shield-bend" d="M70 -6 L82 6 L-6 94 L-18 82 Z" />
+          </g>
+          <path class="shield-edge" d="M4 4h56v30c0 18-12 30-28 35C16 64 4 52 4 34z" />
+        </svg>
+        <div class="masthead-text">
+          <h1><button type="button" class="wordmark" id="wordmark" aria-describedby="etymology" aria-expanded="false">Sinister</button></h1>
+          <p class="tagline" id="tagline">Words you can type with your left hand alone.</p>
+          <div class="etymology" id="etymology" role="tooltip"></div>
+        </div>
+        <div class="hand-switch" role="radiogroup" aria-label="Hand">
+          <button type="button" role="radio" data-hand="left">Left hand</button>
+          <button type="button" role="radio" data-hand="right">Right hand</button>
+        </div>
+      </header>
+
+      <aside class="rail" aria-label="Keys and filters">
+        <section class="panel" aria-labelledby="keys-heading">
+          <h2 id="keys-heading">Keys</h2>
+          <div class="segmented" role="radiogroup" aria-label="Keyboard layout" id="layouts"></div>
+          <div class="keyboard" id="keyboard" role="group" aria-label="Keyboard. Tap a key to add or remove it."></div>
+          <p class="keys-note" id="keys-note"></p>
+          <label class="check"><input type="checkbox" id="reach" /> <span id="reach-label">Count the reach column</span></label>
+          <label class="check"><input type="checkbox" id="latin" /> Include Latin genus names <span class="muted">(1.5 MB)</span></label>
+        </section>
+
+        <section class="panel filters" aria-labelledby="filter-heading">
+          <h2 id="filter-heading">Narrow the list</h2>
+          <div class="add-filters">
+            <button type="button" class="add" id="add-category">By category</button>
+            <button type="button" class="add" id="add-text">By description</button>
+          </div>
+        </section>
+      </aside>
+
+      <main class="results" id="results-region">
+        <ol class="chain" id="chain" aria-label="Filters, in order"></ol>
+        <p class="status" id="status" role="status" aria-live="polite"></p>
+        <ul class="words" id="words"></ul>
+        <button type="button" class="more" id="more" hidden>Show more</button>
+      </main>
+
+      <footer class="footer">
+        <a href="/about.html" id="about-link">About and sources</a>
+        <a href="https://github.com/emdashii/sinister">Source code</a>
+      </footer>
+    </div>
+
+    <dialog class="sheet" id="category-dialog" aria-labelledby="category-title">
+      <form method="dialog" class="sheet-head">
+        <h2 id="category-title">Filter by category</h2>
+        <button class="close" aria-label="Close">×</button>
+      </form>
+      <input type="search" id="category-search" placeholder="Search, for example reptile" autocomplete="off" aria-label="Search categories" />
+      <nav class="crumbs" id="category-crumbs" aria-label="Category path"></nav>
+      <button type="button" class="apply" id="category-apply" hidden></button>
+      <ul class="tree" id="category-list"></ul>
+    </dialog>
+
+    <dialog class="sheet" id="text-dialog" aria-labelledby="text-title">
+      <form method="dialog" class="sheet-head">
+        <h2 id="text-title">Filter by description</h2>
+        <button class="close" aria-label="Close">×</button>
+      </form>
+      <form id="text-form" class="text-form">
+        <label for="text-query">Describe the words you want</label>
+        <input type="text" id="text-query" placeholder="things in a kitchen" autocomplete="off" required maxlength="200" />
+        <p class="muted small" id="text-note">The first time, this downloads about 32 MB: a small language model and word vectors. They then run on your device, offline too.</p>
+        <button type="submit" class="apply">Filter</button>
+      </form>
+    </dialog>
+
+    <dialog class="sheet" id="word-dialog" aria-labelledby="word-title">
+      <form method="dialog" class="sheet-head">
+        <h2 id="word-title" class="word-title"></h2>
+        <button class="close" aria-label="Close">×</button>
+      </form>
+      <div id="word-body"></div>
+    </dialog>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

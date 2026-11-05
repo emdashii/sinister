@@ -1,0 +1,10 @@
+{
+  "name": "Sinister",
+  "short_name": "Sinister",
+  "description": "Find real English words you can type with one hand, then narrow them by category or description.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f3f4f6",
+  "theme_color": "#a3122f",
+  "icons": [{ "src": "/icon-sinister.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

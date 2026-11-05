@@ -1,0 +1,36 @@
+{
+  "desktop": {
+    "query": "sounds scary",
+    "candidates": 2393,
+    "candidateSynsets": 3862,
+    "modelLoadMs": 2750,
+    "A_vectorLoadMs": 31,
+    "A_vectorBytes": 4358106,
+    "A_queryEmbedMs": 10,
+    "A_filterMs": 26,
+    "B_glossLoadMs": 57,
+    "B_glossBytes": 6330873,
+    "B_embedded": 600,
+    "B_firstFilterMs": 8195,
+    "B_textsPerSecond": 73,
+    "B_projectedFullMs": 52904,
+    "B_warmFilterMs": 14
+  },
+  "cpu4x": {
+    "query": "sounds scary",
+    "candidates": 2393,
+    "candidateSynsets": 3862,
+    "modelLoadMs": 1751,
+    "A_vectorLoadMs": 52,
+    "A_vectorBytes": 4358106,
+    "A_queryEmbedMs": 10,
+    "A_filterMs": 80,
+    "B_glossLoadMs": 133,
+    "B_glossBytes": 3901407,
+    "B_embedded": 200,
+    "B_firstFilterMs": 2597,
+    "B_textsPerSecond": 77,
+    "B_projectedFullMs": 50156,
+    "B_warmFilterMs": 25
+  }
+}

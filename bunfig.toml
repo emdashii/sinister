@@ -1,0 +1,3 @@
+# Write the binary bun.lockb: Netlify detects Bun from bun.lockb, not the text bun.lock.
+[install]
+saveTextLockfile = false

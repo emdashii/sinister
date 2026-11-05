@@ -1,0 +1,8 @@
+# Raw downloads for the offline data build (see README "Rebuild the data")
+data/raw/
+
+node_modules/
+dist/
+test-results/
+playwright-report/
+.DS_Store
